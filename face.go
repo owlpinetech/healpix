@@ -17,6 +17,7 @@ var faces []Face
 
 // Precompute all the stats and properties for each face.
 func init() {
+	// the face neighbors of each face
 	neighbors := [][]int{
 		{8, 4, 3, 5, 0, 3, 1, 1},
 		{9, 5, 0, 6, 1, 0, 2, 2},
@@ -63,14 +64,17 @@ func init() {
 	}
 }
 
+// Return the face at the given index, from 0 - 11.
 func NewFace(faceId int) Face {
 	return faces[faceId]
 }
 
+// Returns the index of the face.
 func (f Face) FaceId() int {
 	return f.faceId
 }
 
+// Returns the row index, starting from 0, in which the face resides.
 func (f Face) FaceRow() int {
 	return f.row
 }
@@ -83,7 +87,6 @@ func (f Face) SouthernmostVertex() (int, int) {
 
 // Return the face id of the neighbor of the current face in the given direction. Each of x and y expects one of
 // three values: -1, 0, or 1.
-
 // In this scheme, x and y have 0 at the bottom most vertex of the face (which are arrayed as diamonds conceptually),
 // and each increases outward along the diamond boundary, x along the left side and y along the right side.
 // So x,y == -1,-1 is the directly southern neighbor; x,y == 1,1 is the directly northern neighbor, and x,y == -1,1

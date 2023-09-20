@@ -4,6 +4,7 @@ import (
 	"math"
 )
 
+// Describes a ring of pixels in the HEALPix pixelization, and provides functionality on rings.
 type Ring struct {
 	base  Healpix
 	index int

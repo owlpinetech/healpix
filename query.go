@@ -72,6 +72,8 @@ func Neighbors(hp Healpix, where Where, scheme HealpixScheme) []int {
 		result[6] = FacePixel{fp.x, fp.y + 1, fp.face}.PixelId(hp, scheme)
 		result[7] = FacePixel{fp.x + 1, fp.y + 1, fp.face}.PixelId(hp, scheme)
 	} else {
+		// pixel is on an edge boundary, we need to be cognizant of
+		// special corner pixels and edge index swapping
 
 		result = []int{}
 		iterLen := 9
