@@ -37,8 +37,8 @@ func init() {
 
 	faces = make([]Face, 12)
 	for i := 0; i < 12; i++ {
-		row := i / 4
-		ind := i % 4
+		row := i / BasePixelsPerRow
+		ind := i % BasePixelsPerRow
 		y := row + 2
 		x := 2*ind - (row % 2) + 1
 		faces[i] = Face{i, row, y, x, make(map[byte]int, 6)}

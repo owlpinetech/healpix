@@ -298,7 +298,11 @@ func (p FacePixel) ToRingCoordinate(hp Healpix) RingCoordinate {
 	if ring.IsOffset() {
 		s = 0
 	}
+
 	pixelInRing := (southX*(ring.Pixels()>>2) + h + s) / 2
+	if pixelInRing < 0 {
+		pixelInRing += ring.Pixels() - 1
+	}
 	return RingCoordinate{ringId, pixelInRing}
 }
 

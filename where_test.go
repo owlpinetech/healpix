@@ -86,17 +86,6 @@ func TestFacePixelRingCoord(t *testing.T) {
 		{"1 order: 1,1,8 face pixel = 4,1 ring coordinate", 1, FacePixel{1, 1, 8}, RingCoordinate{4, 1}},
 		{"1 order: 0,0,8 face pixel = 6,0 ring coordinate", 1, FacePixel{0, 0, 8}, RingCoordinate{6, 0}},
 		{"1 order: 0,0,11 face pixel = 6,3 ring coordinate", 1, FacePixel{0, 0, 11}, RingCoordinate{6, 3}},
-
-		/*{"2 order: 0 face pixel = 0,0 ring coordinate", 2, 0, RingCoordinate{0, 0}},
-		{"2 order: 1 face pixel = 0,1 ring coordinate", 2, 1, RingCoordinate{0, 1}},
-		{"2 order: 4 face pixel = 1,0 ring coordinate", 2, 4, RingCoordinate{1, 0}},
-		{"2 order: 9 face pixel = 1,5 ring coordinate", 2, 9, RingCoordinate{1, 5}},
-		{"2 order: 12 face pixel = 2,0 ring coordinate", 2, 12, RingCoordinate{2, 0}},
-		{"2 order: 24 face pixel = 3,0 ring coordinate", 2, 24, RingCoordinate{3, 0}},
-		{"2 order: 40 face pixel = 4,0 ring coordinate", 2, 40, RingCoordinate{4, 0}},
-		{"2 order: 136 face pixel = 10,0 ring coordinate", 2, 136, RingCoordinate{10, 0}},
-		{"2 order: 152 face pixel = 11,0 ring coordinate", 2, 152, RingCoordinate{11, 0}},
-		{"2 order: 168 face pixel = 12,0 ring coordinate", 2, 168, RingCoordinate{12, 0}},*/
 	}
 
 	for ind, tc := range testCases {
@@ -144,12 +133,6 @@ func TestNestPixelFacePixel(t *testing.T) {
 		{"2 order: 1 nest pixel = 1,0,0 face pixel", 2, 1, FacePixel{1, 0, 0}},
 		{"2 order: 4 nest pixel = 2,0,0 face pixel", 2, 4, FacePixel{2, 0, 0}},
 		{"2 order: 9 nest pixel = 1,2,0 face pixel", 2, 9, FacePixel{1, 2, 0}},
-		/*{"2 order: 12 nest pixel = 2,0 face pixel", 2, 12, RingCoordinate{2, 0}},
-		{"2 order: 24 nest pixel = 3,0 face pixel", 2, 24, RingCoordinate{3, 0}},
-		{"2 order: 40 nest pixel = 4,0 face pixel", 2, 40, RingCoordinate{4, 0}},
-		{"2 order: 136 nest pixel = 10,0 face pixel", 2, 136, RingCoordinate{10, 0}},
-		{"2 order: 152 nest pixel = 11,0 face pixel", 2, 152, RingCoordinate{11, 0}},
-		{"2 order: 168 nest pixel = 12,0 face pixel", 2, 168, RingCoordinate{12, 0}},*/
 
 		{"Max order: 1314064518130923784 nest pixel = ?,?,? face pixel", HealpixOrder(MaxOrder()), 1314064518130923784, FacePixel{115814864, 377337186, 4}},
 	}
@@ -191,24 +174,8 @@ func TestPositionToNestPixel(t *testing.T) {
 		{"1 order: 4 nest pixel = 0,0,1 face pixel", 1, 4, 1.2309594173407746, 3 * math.Pi / 4},
 		{"1 order: 16 nest pixel = arcos(-1/3), 0", 1, 16, math.Acos(-1.0 / 3.0), 0},
 		{"1 order: 17 nest pixel = Pi / 2, Pi/8", 1, 17, math.Pi / 2, math.Pi / 8},
-		/*{"1 order: 5 nest pixel = 1,0,1 face pixel", 1, 5, FacePixel{1, 0, 1}},
-		{"1 order: 8 nest pixel = 0,0,2 face pixel", 1, 8, FacePixel{0, 0, 2}},
-		{"1 order: 9 nest pixel = 1,0,2 face pixel", 1, 9, FacePixel{1, 0, 2}},
-		{"1 order: 10 nest pixel = 0,1,2 face pixel", 1, 10, FacePixel{0, 1, 2}},
-		{"1 order: 11 nest pixel = 1,1,2 face pixel", 1, 11, FacePixel{1, 1, 2}},
 
-		/*{"2 order: 0 nest pixel = 0,0,0 face pixel", 2, 0, FacePixel{0, 0, 0}},
-		{"2 order: 1 nest pixel = 1,0,0 face pixel", 2, 1, FacePixel{1, 0, 0}},
-		{"2 order: 4 nest pixel = 2,0,0 face pixel", 2, 4, FacePixel{2, 0, 0}},
-		{"2 order: 9 nest pixel = 1,2,0 face pixel", 2, 9, FacePixel{1, 2, 0}},
-		/*{"2 order: 12 nest pixel = 2,0 face pixel", 2, 12, RingCoordinate{2, 0}},
-		{"2 order: 24 nest pixel = 3,0 face pixel", 2, 24, RingCoordinate{3, 0}},
-		{"2 order: 40 nest pixel = 4,0 face pixel", 2, 40, RingCoordinate{4, 0}},
-		{"2 order: 136 nest pixel = 10,0 face pixel", 2, 136, RingCoordinate{10, 0}},
-		{"2 order: 152 nest pixel = 11,0 face pixel", 2, 152, RingCoordinate{11, 0}},
-		{"2 order: 168 nest pixel = 12,0 face pixel", 2, 168, RingCoordinate{12, 0}},*/
-
-		{"Max order: 1314064518130923784 nest pixel = ?,?,? face pixel", HealpixOrder(MaxOrder()), 1314064518130923784, 1.6251115119976574, -0.3825857300598915},
+		{"Max order: 1314064518130923784 nest pixel = ?,?,? face pixel", HealpixOrder(MaxOrder()), 1314064518130923784, 1.6251115119976574, 5.900599574193858},
 	}
 
 	for ind, tc := range testCases {
@@ -286,17 +253,6 @@ func TestProjectionToFacePixel(t *testing.T) {
 		{"1 order: 0,-Pi/8 = {0,0,4}", 1, 0, -math.Pi / 8, FacePixel{0, 0, 4}},
 		{"1 order: 15Pi/8,0 = {0,1,4}", 1, 15 * math.Pi / 8, 0, FacePixel{0, 1, 4}},
 		{"1 order: Pi/8,0 = {1,0,4}", 1, math.Pi / 8, 0, FacePixel{1, 0, 4}},
-
-		/*{"2 order: 0 nest pixel = 0,0,0 face pixel", 2, 0, FacePixel{0, 0, 0}},
-		{"2 order: 1 nest pixel = 1,0,0 face pixel", 2, 1, FacePixel{1, 0, 0}},
-		{"2 order: 4 nest pixel = 2,0,0 face pixel", 2, 4, FacePixel{2, 0, 0}},
-		{"2 order: 9 nest pixel = 1,2,0 face pixel", 2, 9, FacePixel{1, 2, 0}},
-		/*{"2 order: 12 nest pixel = 2,0 face pixel", 2, 12, RingCoordinate{2, 0}},
-		{"2 order: 24 nest pixel = 3,0 face pixel", 2, 24, RingCoordinate{3, 0}},
-		{"2 order: 40 nest pixel = 4,0 face pixel", 2, 40, RingCoordinate{4, 0}},
-		{"2 order: 136 nest pixel = 10,0 face pixel", 2, 136, RingCoordinate{10, 0}},
-		{"2 order: 152 nest pixel = 11,0 face pixel", 2, 152, RingCoordinate{11, 0}},
-		{"2 order: 168 nest pixel = 12,0 face pixel", 2, 168, RingCoordinate{12, 0}},*/
 	}
 
 	for _, tc := range testCases {
@@ -314,26 +270,55 @@ func TestProjectionToFacePixel(t *testing.T) {
 	}
 }
 
-func TestPositionToProjectionInvertible(t *testing.T) {
+func TestSphereToProjectionInvertible(t *testing.T) {
 	testCases := []struct {
 		name       string
 		colatitude float64
 		longitude  float64
 	}{
-		{"lat/lng Pi/2,0", math.Pi / 2, 0},
-		{"lat/lng Pi/4,Pi", math.Pi / 4, math.Pi},
-		{"lat/lng Pi/3,3Pi/8", math.Pi / 3, 3 * math.Pi / 8},
-		{"lat/lng Pi/6,7Pi/4", math.Pi / 6, 7 * math.Pi / 4},
-		{"lat/lng 1,1", 1, 1},
+		{"colat/lng Pi/2,0", math.Pi / 2, 0},
+		{"colat/lng Pi/4,Pi", math.Pi / 4, math.Pi},
+		{"colat/lng Pi/3,3Pi/8", math.Pi / 3, 3 * math.Pi / 8},
+		{"colat/lng Pi/6,7Pi/4", math.Pi / 6, 7 * math.Pi / 4},
+		{"colat/lng 1,1", 1, 1},
+		{"colat/lng 3.14,6.28", 3.14, 6.28},
 	}
 
 	for _, tc := range testCases {
+		// the healpix argument is not actually used in sphere-projection conversions
 		hp := HealpixOrder(0)
 		t.Run(tc.name, func(t *testing.T) {
 			pos := SphereCoordinate{math.Pi/2 - tc.colatitude, tc.colatitude, tc.longitude}
 			rPos := pos.ToProjectionCoordinate(hp).ToSphereCoordinate(hp)
 			if !withinTolerance(rPos.colatitude, tc.colatitude, 0.000000001) || !withinTolerance(rPos.longitude, tc.longitude, 0.000000001) {
 				t.Errorf("Position inverted expected %v,%v but got %v,%v instead", tc.colatitude, tc.longitude, rPos.colatitude, rPos.longitude)
+			}
+		})
+	}
+}
+
+func TestRingCoordToFacePixelInvertible(t *testing.T) {
+	testCases := []struct {
+		name        string
+		order       int
+		ring        int
+		pixelInRing int
+	}{
+		{"order 0, ring 0, pixel 0", 0, 0, 0},
+		{"order max, ring 0, pixel 0", MaxOrder(), 0, 0},
+		{"order max, ring max, pixel 0", MaxOrder(), NewHealpixOrder(MaxOrder()).Rings() - 1, 0},
+		{"order max, ring 1251133056, pixel 2095318657", MaxOrder(), 1251133056, 2095318657},
+	}
+
+	for _, tc := range testCases {
+		// the healpix argument is not actually used in sphere-projection conversions
+		hp := HealpixOrder(tc.order)
+		t.Run(tc.name, func(t *testing.T) {
+			coord := RingCoordinate{tc.ring, tc.pixelInRing}
+			face := coord.ToFacePixel(hp)
+			rPos := face.ToRingCoordinate(hp)
+			if coord.ring != rPos.ring || coord.pixelInRing != rPos.pixelInRing {
+				t.Errorf("Position inverted expected %v,%v but got %v,%v instead (through %v,%v,%v)", coord.ring, coord.pixelInRing, rPos.ring, rPos.pixelInRing, face.face, face.x, face.y)
 			}
 		})
 	}
@@ -348,6 +333,15 @@ func TestConversionInverses(t *testing.T) {
 			return true
 		}
 		return ringPixel == ringPixel.ToRingCoordinate(hp).ToRingPixel(hp)
+	}
+
+	// ring coordinate to face pixel is perfectly invertible
+	ringCoordToFacePixelInvertible := func(ringPixel RingPixel) bool {
+		if ringPixel >= RingPixel(hp.Pixels()) || ringPixel < 0 {
+			return true
+		}
+		ringCoord := ringPixel.ToRingCoordinate(hp)
+		return ringCoord == ringCoord.ToFacePixel(hp).ToRingCoordinate(hp)
 	}
 
 	// ring pixels to face pixels is perfectly invertible
@@ -385,6 +379,9 @@ func TestConversionInverses(t *testing.T) {
 	if err := quick.Check(ringPixelToRingCoordInvertible, nil); err != nil {
 		t.Errorf("Ring pixel was different after converted to ring coordinate and back: %v", err)
 	}
+	if err := quick.Check(ringCoordToFacePixelInvertible, nil); err != nil {
+		t.Errorf("Ring coordinate was different after converted to face pixel and back: %v", err)
+	}
 	if err := quick.Check(ringPixelToFacePixelInvertible, nil); err != nil {
 		t.Errorf("Ring pixel was different after converted to face pixel and back: %v", err)
 	}
@@ -396,5 +393,24 @@ func TestConversionInverses(t *testing.T) {
 	}
 	if err := quick.Check(nestPixelToSphereCoordinateInvertible, nil); err != nil {
 		t.Errorf("Nest pixel was different after converted to position and back: %v", err)
+	}
+}
+
+func TestNestRingSpherePositionsSame(t *testing.T) {
+	hp := NewHealpixOrder(MaxOrder())
+
+	nestRingSpherePositionsSame := func(nest NestPixel) bool {
+		if nest >= NestPixel(hp.Pixels()) || nest < 0 {
+			return true
+		}
+		ring := nest.ToRingPixel(hp)
+		nPos := nest.ToSphereCoordinate(hp)
+		rPos := ring.ToSphereCoordinate(hp)
+		return withinTolerance(nPos.colatitude, rPos.colatitude, 0.000000001) &&
+			withinTolerance(nPos.longitude, rPos.longitude, 0.000000001)
+	}
+
+	if err := quick.Check(nestRingSpherePositionsSame, nil); err != nil {
+		t.Errorf("Nest pixel and equivalent ring pixel do not have the same sphere position: %v", err)
 	}
 }

@@ -97,8 +97,8 @@ func TestHealpixPolarRegionPixels(t *testing.T) {
 		{"0 order = 1 nside = 0 polar", 0, 1, 0},
 		{"1 order = 2 nside = 4 polar", 1, 2, 4},
 		{"2 order = 4 nside = 24 polar", 2, 4, 24},
-		{"3 order = 8 nside = 112 rings", 3, 8, 112},
-		{"4 order = 16 nside = 480 rings", 4, 16, 480},
+		{"3 order = 8 nside = 112 polar", 3, 8, 112},
+		{"4 order = 16 nside = 480 polar", 4, 16, 480},
 	}
 
 	for _, tc := range testCases {
