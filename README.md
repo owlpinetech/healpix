@@ -14,7 +14,7 @@ A third numbering scheme, **Nested Unique**, allows for the selection of pixels 
 ## Roadmap
 
 - [x] - Querying nearest neighbors
-- [ ] - Support 'Nested Unique' pixel numbering (for multiresolution)
+- [x] - Support 'Nested Unique' pixel numbering (for multiresolution)
 - [ ] - Support Cartesian 3-vector 'positions'
 - [ ] - Querying discs
 - [ ] - Querying polygons
