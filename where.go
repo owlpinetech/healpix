@@ -3,6 +3,8 @@ package healpix
 import (
 	"fmt"
 	"math"
+
+	"github.com/owlpinetech/healpix/internal/intmath"
 )
 
 // An interface for converting between different indexing schemes and accessing the desired
@@ -10,6 +12,7 @@ import (
 // the index itself references.
 type Where interface {
 	ToNestPixel(Healpix) NestPixel                       // Convert the index to an equivalent pixel index in Nest scheme.
+	ToUniquePixel(Healpix) UniquePixel                   // Convert the index to an equivalent pixel index in Nested Unique scheme, according to the HEALPix resolution supplied.
 	ToRingPixel(Healpix) RingPixel                       // Convert the index to an equivalent pixel index in Ring scheme.
 	ToFacePixel(Healpix) FacePixel                       // Convert the index to an equivalent face 'x & y' index.
 	ToRingCoordinate(Healpix) RingCoordinate             // Convert the index to an equivalent ring & offset index.
@@ -26,6 +29,10 @@ type NestPixel int
 // Identity function on NestPixel to satisfy the Where interface.
 func (p NestPixel) ToNestPixel(hp Healpix) NestPixel {
 	return p
+}
+
+func (p NestPixel) ToUniquePixel(hp Healpix) UniquePixel {
+	return UniquePixel(intmath.Pow(4, hp.Order()+1) + int(p))
 }
 
 func (p NestPixel) ToRingPixel(hp Healpix) RingPixel {
@@ -73,6 +80,44 @@ func (p NestPixel) PixelId(hp Healpix, scheme HealpixScheme) int {
 	return int(p.ToRingPixel(hp))
 }
 
+// The index of a pixel in a HEALPix map in nested numbering, combined with the order of the HEALPix map resolution.
+// Useful for indexing in multiresolution HEALPix maps.
+type UniquePixel int
+
+func (p UniquePixel) ToNestPixel(hp Healpix) NestPixel {
+	order := int(math.Floor(0.5 * math.Log2(float64(p)/4.0)))
+	nest := int(p) - intmath.Pow(4, order+1)
+	return NestPixel(nest)
+}
+
+func (p UniquePixel) ToUniquePixel(hp Healpix) UniquePixel {
+	return p
+}
+
+func (p UniquePixel) ToRingPixel(hp Healpix) RingPixel {
+	return p.ToNestPixel(hp).ToRingPixel(hp)
+}
+
+func (p UniquePixel) ToFacePixel(hp Healpix) FacePixel {
+	return p.ToNestPixel(hp).ToFacePixel(hp)
+}
+
+func (p UniquePixel) ToRingCoordinate(hp Healpix) RingCoordinate {
+	return p.ToNestPixel(hp).ToRingCoordinate(hp)
+}
+
+func (p UniquePixel) ToProjectionCoordinate(hp Healpix) ProjectionCoordinate {
+	return p.ToNestPixel(hp).ToProjectionCoordinate(hp)
+}
+
+func (p UniquePixel) ToSphereCoordinate(hp Healpix) SphereCoordinate {
+	return p.ToNestPixel(hp).ToSphereCoordinate(hp)
+}
+
+func (p UniquePixel) PixelId(hp Healpix, scheme HealpixScheme) int {
+	return p.ToNestPixel(hp).PixelId(hp, scheme)
+}
+
 // The index of a pixel in a HEALPix map counting ring-wise down from the north pole.
 type RingPixel int
 
@@ -82,6 +127,10 @@ func (p RingPixel) RingId(hp Healpix) int {
 
 func (p RingPixel) ToNestPixel(hp Healpix) NestPixel {
 	return p.ToRingCoordinate(hp).ToFacePixel(hp).ToNestPixel(hp)
+}
+
+func (p RingPixel) ToUniquePixel(hp Healpix) UniquePixel {
+	return p.ToRingCoordinate(hp).ToFacePixel(hp).ToNestPixel(hp).ToUniquePixel(hp)
 }
 
 func (p RingPixel) ToRingPixel(hp Healpix) RingPixel {
@@ -156,6 +205,10 @@ func (p RingCoordinate) PixelInRing() int {
 
 func (p RingCoordinate) ToNestPixel(hp Healpix) NestPixel {
 	return p.ToFacePixel(hp).ToNestPixel(hp)
+}
+
+func (p RingCoordinate) ToUniquePixel(hp Healpix) UniquePixel {
+	return p.ToFacePixel(hp).ToNestPixel(hp).ToUniquePixel(hp)
 }
 
 func (p RingCoordinate) ToRingPixel(hp Healpix) RingPixel {
@@ -277,6 +330,10 @@ func (p FacePixel) ToNestPixel(hp Healpix) NestPixel {
 	return NestPixel(facePixelId + p.face*hp.FacePixels())
 }
 
+func (p FacePixel) ToUniquePixel(hp Healpix) UniquePixel {
+	return p.ToNestPixel(hp).ToUniquePixel(hp)
+}
+
 func (p FacePixel) ToRingPixel(hp Healpix) RingPixel {
 	return p.ToRingCoordinate(hp).ToRingPixel(hp)
 }
@@ -355,6 +412,10 @@ func (p ProjectionCoordinate) Y() float64 {
 
 func (p ProjectionCoordinate) ToNestPixel(hp Healpix) NestPixel {
 	return p.ToFacePixel(hp).ToNestPixel(hp)
+}
+
+func (p ProjectionCoordinate) ToUniquePixel(hp Healpix) UniquePixel {
+	return p.ToFacePixel(hp).ToNestPixel(hp).ToUniquePixel(hp)
 }
 
 func (p ProjectionCoordinate) ToRingPixel(hp Healpix) RingPixel {
@@ -453,6 +514,10 @@ func (p SphereCoordinate) Longitude() float64 {
 
 func (p SphereCoordinate) ToNestPixel(hp Healpix) NestPixel {
 	return p.ToProjectionCoordinate(hp).ToFacePixel(hp).ToNestPixel(hp)
+}
+
+func (p SphereCoordinate) ToUniquePixel(hp Healpix) UniquePixel {
+	return p.ToProjectionCoordinate(hp).ToFacePixel(hp).ToNestPixel(hp).ToUniquePixel(hp)
 }
 
 func (p SphereCoordinate) ToRingPixel(hp Healpix) RingPixel {

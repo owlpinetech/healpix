@@ -151,6 +151,41 @@ func TestNestPixelFacePixel(t *testing.T) {
 	}
 }
 
+func TestNestPixelUniquePixel(t *testing.T) {
+	testCases := []struct {
+		name  string
+		order HealpixOrder
+		nest  NestPixel
+		uniq  UniquePixel
+	}{
+		{"0 order: 0 nest pixel = 4 unique pixel", 0, 0, 4},
+		{"0 order: 1 nest pixel = 5 unique pixel", 0, 1, 5},
+		{"0 order: 2 nest pixel = 6 unique pixel", 0, 2, 6},
+		{"0 order: 11 nest pixel = 15 unique pixel", 0, 11, 15},
+
+		{"1 order: 0 nest pixel = 16 unique pixel", 1, 0, 16},
+		{"1 order: 1 nest pixel = 17 unique pixel", 1, 1, 17},
+		{"1 order: 2 nest pixel = 18 unique pixel", 1, 2, 18},
+
+		{"2 order: 0 nest pixel = 64 unique pixel", 2, 0, 64},
+		{"2 order: 1 nest pixel = 65 unique pixel", 2, 1, 65},
+		{"2 order: 2 nest pixel = 66 unique pixel", 2, 2, 66},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			rUniq := tc.nest.ToUniquePixel(tc.order)
+			rNest := tc.uniq.ToNestPixel(tc.order)
+			if rUniq != tc.uniq {
+				t.Errorf("Nest to unique expected %v, got %v instead", tc.uniq, rUniq)
+			}
+			if rNest != tc.nest {
+				t.Errorf("Unique to nest expected %v, got %v instead", tc.nest, rNest)
+			}
+		})
+	}
+}
+
 func TestPositionToNestPixel(t *testing.T) {
 	testCases := []struct {
 		name       string
