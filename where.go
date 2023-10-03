@@ -497,6 +497,16 @@ type SphereCoordinate struct {
 	longitude  float64
 }
 
+// Create a SphereCoordinate structure from a latitude/longitude pair.
+func NewLatLonCoordinate(lat float64, lon float64) SphereCoordinate {
+	return SphereCoordinate{lat, lat + math.Pi/2, lon}
+}
+
+// Create a SphereCoordinate structure from a colatitude/longitude pair.
+func NewColatLonCoordinate(colat float64, lon float64) SphereCoordinate {
+	return SphereCoordinate{colat - math.Pi/2, colat, lon}
+}
+
 // The latitude component of the coordinate on the sphere, in units of radians.
 func (p SphereCoordinate) Latitude() float64 {
 	return p.latitude

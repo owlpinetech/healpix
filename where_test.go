@@ -359,6 +359,27 @@ func TestRingCoordToFacePixelInvertible(t *testing.T) {
 	}
 }
 
+func TestSphereConstructorsSame(t *testing.T) {
+	latToColatSame := func(latitude float64, longitude float64) bool {
+		latLon := NewLatLonCoordinate(latitude, longitude)
+		colatLon := NewColatLonCoordinate(latLon.Colatitude(), latLon.Longitude())
+		return withinTolerance(latLon.Latitude(), colatLon.Latitude(), 0.000000001)
+	}
+
+	colatToLatSame := func(colatitude float64, longitude float64) bool {
+		colatLon := NewColatLonCoordinate(colatitude, longitude)
+		latLon := NewLatLonCoordinate(colatLon.Latitude(), colatLon.Longitude())
+		return withinTolerance(latLon.Latitude(), colatLon.Latitude(), 0.000000001)
+	}
+
+	if err := quick.Check(latToColatSame, nil); err != nil {
+		t.Errorf("Latitude was different after converted to colatitude and back: %v", err)
+	}
+	if err := quick.Check(colatToLatSame, nil); err != nil {
+		t.Errorf("Colatitude was different after converted to latitude and back: %v", err)
+	}
+}
+
 func TestConversionInverses(t *testing.T) {
 	hp := NewHealpixOrder(MaxOrder())
 
