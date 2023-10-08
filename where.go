@@ -193,6 +193,11 @@ type RingCoordinate struct {
 	pixelInRing int // The index within the ring (assuming first pixel in the ring == 0) that contains the pixel.
 }
 
+// Create a new pixel index from the ring in which the pixel is found, and it's offset from the meridian within the ring.
+func NewRingCoordinate(ring int, pixelInRing int) RingCoordinate {
+	return RingCoordinate{ring, pixelInRing}
+}
+
 // The HEALPix ring the pixel is located in.
 func (p RingCoordinate) Ring() int {
 	return p.ring
@@ -300,14 +305,22 @@ type FacePixel struct {
 	face int
 }
 
+// Create a new face pixel using the given coordinates.
+func NewFacePixel(face int, x int, y int) FacePixel {
+	return FacePixel{x, y, face}
+}
+
+// Returns the row-index along the north-east direction of the face, increasing from the south to the north.
 func (p FacePixel) X() int {
 	return p.x
 }
 
+// Returns the row-index along the north-west direction of the face, increasing from the south to the north.
 func (p FacePixel) Y() int {
 	return p.y
 }
 
+// Returns the index identifier of the face in which the pixel is found.
 func (p FacePixel) Face() int {
 	return p.face
 }
@@ -398,6 +411,10 @@ func (p FacePixel) PixelId(hp Healpix, scheme HealpixScheme) int {
 type ProjectionCoordinate struct {
 	x float64
 	y float64
+}
+
+func NewProjectionCoordinate(x float64, y float64) ProjectionCoordinate {
+	return ProjectionCoordinate{x, y}
 }
 
 // The horizontal component of the coordinate on the planar projection. Correlated with longitude in spherical coordinates.
