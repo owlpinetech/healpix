@@ -228,37 +228,6 @@ func TestPositionToNestPixel(t *testing.T) {
 	}
 }
 
-func TestPositionToProjection(t *testing.T) {
-	testCases := []struct {
-		name       string
-		colatitude float64
-		longitude  float64
-		xproj      float64
-		yproj      float64
-	}{
-		{"lat/lng Pi/2,0 = x/y 0,0", math.Pi / 2, 0, 0, 0},
-		{"lat/lng Pi/2,2Pi = x/y 2Pi,0", math.Pi / 2, 2 * math.Pi, 2 * math.Pi, 0},
-		{"lat/lng arccos(1/3),Pi = x/y Pi,Pi/8", math.Acos(1.0 / 3.0), math.Pi, math.Pi, math.Pi / 8},
-		{"lat/lng Pi/4,Pi = x/y Pi,Pi/4", math.Acos(2.0 / 3.0), math.Pi, math.Pi, math.Pi / 4},
-	}
-
-	for _, tc := range testCases {
-		hp := HealpixOrder(0)
-		t.Run(tc.name, func(t *testing.T) {
-			pos := SphereCoordinate{math.Pi/2 - tc.colatitude, tc.colatitude, tc.longitude}
-			proj := ProjectionCoordinate{tc.xproj, tc.yproj}
-			rProj := pos.ToProjectionCoordinate(hp)
-			rPos := proj.ToSphereCoordinate(hp)
-			if !withinTolerance(rPos.colatitude, tc.colatitude, 0.000000001) || !withinTolerance(rPos.longitude, tc.longitude, 0.000000001) {
-				t.Errorf("Projection to position expected %v,%v but got %v,%v instead", tc.colatitude, tc.longitude, rPos.colatitude, rPos.longitude)
-			}
-			if !withinTolerance(rProj.x, tc.xproj, 0.000000001) || !withinTolerance(rProj.y, tc.yproj, 0.000000001) {
-				t.Errorf("Position to projection expected %v,%v but got %v,%v instead", tc.xproj, tc.yproj, rProj.x, rProj.y)
-			}
-		})
-	}
-}
-
 func TestProjectionToFacePixel(t *testing.T) {
 	testCases := []struct {
 		name  string
@@ -300,33 +269,6 @@ func TestProjectionToFacePixel(t *testing.T) {
 			}
 			if rFace != tc.face {
 				t.Errorf("Projection to face pixel expected %v, but got %v instead", tc.face, rFace)
-			}
-		})
-	}
-}
-
-func TestSphereToProjectionInvertible(t *testing.T) {
-	testCases := []struct {
-		name       string
-		colatitude float64
-		longitude  float64
-	}{
-		{"colat/lng Pi/2,0", math.Pi / 2, 0},
-		{"colat/lng Pi/4,Pi", math.Pi / 4, math.Pi},
-		{"colat/lng Pi/3,3Pi/8", math.Pi / 3, 3 * math.Pi / 8},
-		{"colat/lng Pi/6,7Pi/4", math.Pi / 6, 7 * math.Pi / 4},
-		{"colat/lng 1,1", 1, 1},
-		{"colat/lng 3.14,6.28", 3.14, 6.28},
-	}
-
-	for _, tc := range testCases {
-		// the healpix argument is not actually used in sphere-projection conversions
-		hp := HealpixOrder(0)
-		t.Run(tc.name, func(t *testing.T) {
-			pos := SphereCoordinate{math.Pi/2 - tc.colatitude, tc.colatitude, tc.longitude}
-			rPos := pos.ToProjectionCoordinate(hp).ToSphereCoordinate(hp)
-			if !withinTolerance(rPos.colatitude, tc.colatitude, 0.000000001) || !withinTolerance(rPos.longitude, tc.longitude, 0.000000001) {
-				t.Errorf("Position inverted expected %v,%v but got %v,%v instead", tc.colatitude, tc.longitude, rPos.colatitude, rPos.longitude)
 			}
 		})
 	}

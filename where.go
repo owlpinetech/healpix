@@ -1,9 +1,9 @@
 package healpix
 
 import (
-	"fmt"
 	"math"
 
+	"github.com/owlpinetech/flatsphere"
 	"github.com/owlpinetech/healpix/internal/intmath"
 )
 
@@ -477,25 +477,8 @@ func (p ProjectionCoordinate) ToProjectionCoordinate(hp Healpix) ProjectionCoord
 }
 
 func (p ProjectionCoordinate) ToSphereCoordinate(hp Healpix) SphereCoordinate {
-	absY := math.Abs(p.y)
-	if absY >= math.Pi/2 {
-		panic(fmt.Sprintf("healpix: domain error in projection coordinate y dimension, %v too big", p.y))
-	}
-
-	if absY <= math.Pi/4 {
-		// equatorial region
-		z := (8 / (3 * math.Pi)) * p.y
-		colat := math.Acos(z)
-		return SphereCoordinate{math.Pi/2 - colat, colat, p.x}
-	} else {
-		// polar region
-		tt := math.Mod(p.x, math.Pi/2)
-		lng := p.x - ((absY-math.Pi/4)/(absY-math.Pi/2))*(tt-math.Pi/4)
-		zz := 2 - 4*absY/math.Pi
-		z := (1 - 1.0/3.0*(zz*zz)) * (p.y / absY)
-		colat := math.Acos(z)
-		return SphereCoordinate{math.Pi/2 - colat, colat, lng}
-	}
+	lat, lon := flatsphere.NewHEALPixStandard().Inverse(p.x, p.y)
+	return NewLatLonCoordinate(lat, lon)
 }
 
 func (p ProjectionCoordinate) PixelId(hp Healpix, scheme HealpixScheme) int {
@@ -560,21 +543,8 @@ func (p SphereCoordinate) ToRingCoordinate(hp Healpix) RingCoordinate {
 }
 
 func (p SphereCoordinate) ToProjectionCoordinate(hp Healpix) ProjectionCoordinate {
-	z := math.Cos(p.colatitude)
-	if math.Abs(z) <= 2.0/3.0 {
-		// equatiorial region
-		return ProjectionCoordinate{p.longitude, 3 * (math.Pi / 8) * z}
-	} else {
-		// polar region
-		facetX := math.Mod(p.longitude, math.Pi/2)
-		sigma := 2 - math.Sqrt(3*(1-math.Abs(z)))
-		if z < 0 {
-			sigma = -sigma
-		}
-		y := (math.Pi / 4) * sigma
-		x := p.longitude - (math.Abs(sigma)-1)*(facetX-math.Pi/4)
-		return ProjectionCoordinate{x, y}
-	}
+	x, y := flatsphere.NewHEALPixStandard().Project(p.Latitude(), p.Longitude())
+	return NewProjectionCoordinate(x, y)
 }
 
 func (p SphereCoordinate) ToSphereCoordinate(hp Healpix) SphereCoordinate {
