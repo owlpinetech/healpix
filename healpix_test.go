@@ -36,7 +36,7 @@ func TestHealpixPixels(t *testing.T) {
 		name   string
 		order  int
 		nside  int
-		pixels int
+		pixels uint
 	}{
 		{"0 order = 1 nside = 12 pixels", 0, 1, 12},
 		{"1 order = 2 nside = 48 pixels", 1, 2, 48},
@@ -47,8 +47,8 @@ func TestHealpixPixels(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			hpo := NewHealpixOrder(tc.order)
-			hpn := NewHealpixSide(tc.nside)
+			hpo := New(NewHealpixOrder(tc.order))
+			hpn := New(NewHealpixSide(tc.nside))
 			if hpo.Pixels() != tc.pixels {
 				t.Errorf("Order config expected pixels %v, got %v instead", tc.pixels, hpo.Pixels())
 			}
@@ -75,8 +75,8 @@ func TestHealpixRings(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			hpo := NewHealpixOrder(tc.order)
-			hpn := NewHealpixSide(tc.nside)
+			hpo := New(NewHealpixOrder(tc.order))
+			hpn := New(NewHealpixSide(tc.nside))
 			if hpo.Rings() != tc.rings {
 				t.Errorf("Order config expected rings %v, got %v instead", tc.rings, hpo.Rings())
 			}
@@ -103,8 +103,8 @@ func TestHealpixPolarRegionPixels(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			hpo := NewHealpixOrder(tc.order)
-			hpn := NewHealpixSide(tc.nside)
+			hpo := New(NewHealpixOrder(tc.order))
+			hpn := New(NewHealpixSide(tc.nside))
 			if hpo.PolarRegionPixels() != tc.polar {
 				t.Errorf("Order config expected polar pixels %v, got %v instead", tc.polar, hpo.PolarRegionPixels())
 			}

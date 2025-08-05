@@ -45,15 +45,15 @@ func (r Ring) Index() int {
 }
 
 // The equivalent Ring scheme pixel number of the first (0) pixel in this ring.
-func (r Ring) FirstIndex() int {
-	first := 0
+func (r Ring) FirstIndex() uint {
+	first := uint(0)
 	if r.northIndex < r.base.FaceSidePixels() {
-		first = 2 * (r.northIndex + 1) * r.northIndex
+		first = 2 * uint(r.northIndex+1) * uint(r.northIndex)
 	} else {
-		first = r.base.PolarRegionPixels() + (r.northIndex+1-r.base.FaceSidePixels())*r.Pixels()
+		first = uint(r.base.PolarRegionPixels()) + uint((r.northIndex+1-r.base.FaceSidePixels())*r.Pixels())
 	}
 	if r.northIndex != r.index {
-		first = r.base.Pixels() - first - r.Pixels()
+		first = r.base.Pixels() - first - uint(r.Pixels())
 	}
 	return first
 }

@@ -10,7 +10,7 @@ func TestFirstIndex(t *testing.T) {
 		name     string
 		order    HealpixOrder
 		ringId   int
-		fstIndex int
+		fstIndex uint
 	}{
 		{"Ring 0 @ order 0 = 0 index", 0, 0, 0},
 		{"Ring 1 @ order 0 = 4 index", 0, 1, 4},
@@ -38,7 +38,7 @@ func TestFirstIndex(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ring := NewRing(tc.order, tc.ringId)
+			ring := NewRing(New(tc.order), tc.ringId)
 			if ring.FirstIndex() != tc.fstIndex {
 				t.Errorf("Ring %v @ order %v first index expected %v, got %v instead", tc.ringId, tc.order, tc.fstIndex, ring.FirstIndex())
 			}
@@ -46,7 +46,7 @@ func TestFirstIndex(t *testing.T) {
 	}
 }
 
-func TestRingPixels(t *testing.T) {
+func TestRingOffset(t *testing.T) {
 	testCases := []struct {
 		name   string
 		order  HealpixOrder
@@ -79,7 +79,7 @@ func TestRingPixels(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ring := NewRing(tc.order, tc.ringId)
+			ring := NewRing(New(tc.order), tc.ringId)
 			if ring.IsOffset() != tc.offset {
 				t.Errorf("Ring %v @ order %v offset expected %v, got %v instead", tc.ringId, tc.order, tc.offset, ring.IsOffset())
 			}
@@ -87,7 +87,21 @@ func TestRingPixels(t *testing.T) {
 	}
 }
 
-func TestRingOffset(t *testing.T) {
+func TestRing0AndNMinus1PixelsAlways4(t *testing.T) {
+	for order := HealpixOrder(0); order <= HealpixOrder(MaxOrder()); order++ {
+		hp := New(order)
+		ring := NewRing(hp, 0)
+		if ring.Pixels() != 4 {
+			t.Errorf("Ring 0 @ order %v pixels expected 4, got %v instead", order, ring.Pixels())
+		}
+		ring = NewRing(New(order), hp.Rings()-1)
+		if ring.Pixels() != 4 {
+			t.Errorf("Ring N-1 @ order %v pixels expected 4, got %v instead", order, ring.Pixels())
+		}
+	}
+}
+
+func TestRingPixels(t *testing.T) {
 	testCases := []struct {
 		name   string
 		order  HealpixOrder
@@ -98,6 +112,7 @@ func TestRingOffset(t *testing.T) {
 		{"Ring 1 @ order 0 = 4 pixels", 0, 1, 4},
 		{"Ring 2 @ order 0 = 4 pixels", 0, 2, 4},
 
+		{"Ring 0 @ order 1 = 4 pixels", 1, 0, 4},
 		{"Ring 1 @ order 1 = 8 pixels", 1, 1, 8},
 		{"Ring 2 @ order 1 = 8 pixels", 1, 2, 8},
 		{"Ring 3 @ order 1 = 8 pixels", 1, 3, 8},
@@ -119,7 +134,7 @@ func TestRingOffset(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ring := NewRing(tc.order, tc.ringId)
+			ring := NewRing(New(tc.order), tc.ringId)
 			if ring.Pixels() != tc.pixels {
 				t.Errorf("Ring %v @ order %v pixels expected %v, got %v instead", tc.ringId, tc.order, tc.pixels, ring.Pixels())
 			}
@@ -152,7 +167,7 @@ func TestRingLatitude(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ring := NewRing(tc.order, tc.ringId)
+			ring := NewRing(New(tc.order), tc.ringId)
 			if !withinTolerance(ring.Latitude(), tc.latitude, 1e-10) {
 				t.Errorf("Ring %v @ order %v latitude expected %v, got %v instead", tc.ringId, tc.order, tc.latitude, ring.Latitude())
 			}
